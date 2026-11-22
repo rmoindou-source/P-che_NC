@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pêche NC</title>
+<style>
+body{background:#092b3d;color:white;font-family:Arial;margin:0;padding:20px}
+h1{text-align:center;color:#79dfed}
+section{background:#15465b;padding:18px;border-radius:15px;margin:15px 0}
+select,button{width:100%;padding:14px;border:0;border-radius:10px;font-size:16px;margin:8px 0;box-sizing:border-box}
+button{background:#23b8cc;color:#092b3d;font-weight:bold}
+small{color:#c1dce5}
+</style>
+</head>
+<body>
+<h1>🎣 PÊCHE NC</h1>
+<p style="text-align:center">Mon lagon, ma passion</p>
+<section>
+<h2>📍 Secteur de pêche</h2>
+<select id="zone">
+<option>Thio</option>
+<option>Nouméa</option>
+<option>Canala</option>
+<option>Houaïlou</option>
+<option>Hienghène</option>
+<option>Touho</option>
+<option>Poindimié</option>
+<option>Koumac</option>
+<option>Poum</option>
+<option>Bourail</option>
+<option>Yaté</option>
+<option>Île des Pins</option>
+<option>Lifou</option>
+<option>Maré</option>
+<option>Ouvéa</option>
+</select>
+</section>
+<section>
+<h2>🌙 Calendrier tahitien</h2>
+<label>Choisir le jour lunaire</label>
+<select id="jour" onchange="conseil()"></select>
+<h3 id="resultat"></h3>
+<small>Conseils traditionnels, sans garantie de capture.</small>
+</section>
+<section>
+<h2>🌊 Marées et météo</h2>
+<p>Consulter les prévisions officielles avant le départ.</p>
+<button onclick="location.href='https://www.meteo.nc/'">Météo-France NC</button>
+</section>
+<section>
+<h2>🔔 Bulletin quotidien</h2>
+<p>Horaire prévu : 05 h 00</p>
+<small>Notifications en cours de développement.</small>
+</section>
+<p style="text-align:center">🇳🇨 Pêche NC — Version 1</p>
+<script>
+const jours=[
+"Bon de la nuit à l’aube",
+"Bon de la nuit au début de la matinée",
+"Bon jusqu’au milieu de l’après-midi",
+"Très bon jusqu’au milieu de l’après-midi",
+"Très bon jusqu’au milieu de l’après-midi",
+"Très bon jusqu’au milieu de l’après-midi",
+"Excellent toute la matinée",
+"Bon le matin, moyen l’après-midi",
+"Bon le matin, excellent l’après-midi",
+"Moyen toute la journée",
+"Moyen toute la journée",
+"Moyen toute la journée",
+"Excellent de l’après-midi à la nuit",
+"Excellent toute la journée",
+"Moyen toute la journée",
+"Mauvaise journée",
+"Très mauvaise journée",
+"Bonne journée",
+"Bon le matin, moyen l’après-midi",
+"Bon le matin, mauvais l’après-midi",
+"Bon le matin jusqu’à midi",
+"Bon l’après-midi",
+"Moyen vers le soir",
+"Moyen vers le soir",
+"Moyen vers le soir",
+"Bon l’après-midi",
+"Excellent l’après-midi et le soir",
+"Excellent l’après-midi et le soir",
+"Bon le soir"
+];
+const liste=document.getElementById("jour");
+jours.forEach((texte,i)=>{
+liste.add(new Option("Jour lunaire "+(i+1),i));
+});
+function conseil(){
+document.getElementById("resultat").textContent=jours[Number(liste.value)];
+}
+conseil();
+</script>
+</body>
+</html>
