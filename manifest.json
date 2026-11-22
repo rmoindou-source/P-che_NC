@@ -1,0 +1,10 @@
+{
+  "name": "Pêche NC",
+  "short_name": "Pêche NC",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#092b3d",
+  "theme_color": "#092b3d",
+  "lang": "fr"
+}
