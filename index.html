@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#092b3d">
 <title>Pêche NC</title>
 <style>
 body{background:#092b3d;color:white;font-family:Arial;margin:0;padding:20px}
@@ -12,11 +13,17 @@ section{background:#15465b;padding:18px;border-radius:15px;margin:15px 0}
 select,button{width:100%;padding:14px;border:0;border-radius:10px;font-size:16px;margin:8px 0;box-sizing:border-box}
 button{background:#23b8cc;color:#092b3d;font-weight:bold}
 small{color:#c1dce5}
+.lune{font-size:80px;text-align:center;margin:10px}
+.date{text-align:center;color:#79dfed}
+.info{text-align:center;line-height:1.7}
+#resultat{padding:15px;background:#092b3d;border-radius:10px;line-height:1.5}
 </style>
 </head>
 <body>
 <h1>🎣 PÊCHE NC</h1>
 <p style="text-align:center">Mon lagon, ma passion</p>
+<p class="date" id="date"></p>
+
 <section>
 <h2>📍 Secteur de pêche</h2>
 <select id="zone">
@@ -35,26 +42,62 @@ small{color:#c1dce5}
 <option>Lifou</option>
 <option>Maré</option>
 <option>Ouvéa</option>
+<option>Païta</option>
+<option>Dumbéa</option>
+<option>Mont-Dore</option>
+<option>Boulouparis</option>
+<option>La Foa</option>
+<option>Moindou</option>
+<option>Poya</option>
+<option>Pouembout</option>
+<option>Koné</option>
+<option>Voh</option>
+<option>Kaala-Gomen</option>
+<option>Ouégoa</option>
+<option>Pouébo</option>
+<option>Ponérihouen</option>
+<option>Kouaoua</option>
+<option>Belep</option>
+<option>Farino</option>
+<option>Sarraméa</option>
 </select>
 </section>
+
 <section>
 <h2>🌙 Calendrier de pêche lunaire</h2>
-<label>Choisir le jour lunaire</label>
-<select id="jour" onchange="conseil()"></select>
-<h3 id="resultat"></h3>
-<small>Conseils traditionnels, sans garantie de capture.</small>
+<div class="lune" id="lune"></div>
+<div class="info">
+<h3 id="phase"></h3>
+<p id="age"></p>
+<p id="illumination"></p>
+</div>
+<hr>
+<h3>🎣 Conseil de pêche du jour</h3>
+<div id="resultat"></div>
+<small>Calcul lunaire approximatif. Conseils traditionnels, sans garantie de capture.</small>
 </section>
+
+<section>
+<h2>📅 Calendrier des 29 jours</h2>
+<select id="jour" onchange="conseil()"></select>
+<p id="manuel"></p>
+</section>
+
 <section>
 <h2>🌊 Marées et météo</h2>
 <p>Consulter les prévisions officielles avant le départ.</p>
 <button onclick="location.href='https://www.meteo.nc/'">Météo-France NC</button>
+<small>Horaires des marées automatiques en cours de développement.</small>
 </section>
+
 <section>
 <h2>🔔 Bulletin quotidien</h2>
 <p>Horaire prévu : 05 h 00</p>
 <small>Notifications en cours de développement.</small>
 </section>
-<p style="text-align:center">🇳🇨 Pêche NC — Version 1</p>
+
+<p style="text-align:center">🇳🇨 Pêche NC — Version 2.0</p>
+
 <script>
 const jours=[
 "Bon de la nuit à l’aube",
@@ -87,14 +130,71 @@ const jours=[
 "Excellent l’après-midi et le soir",
 "Bon le soir"
 ];
+
+const phases=[
+"Nouvelle lune",
+"Premier croissant",
+"Premier quartier",
+"Lune gibbeuse croissante",
+"Pleine lune",
+"Lune gibbeuse décroissante",
+"Dernier quartier",
+"Dernier croissant"
+];
+
+const symboles=["🌑","🌒","🌓","🌔","🌕","🌖","🌗","🌘"];
+
 const liste=document.getElementById("jour");
+
 jours.forEach((texte,i)=>{
 liste.add(new Option("Jour lunaire "+(i+1),i));
 });
+
 function conseil(){
-document.getElementById("resultat").textContent=jours[Number(liste.value)];
+document.getElementById("manuel").textContent=jours[Number(liste.value)];
 }
+
+function calculLune(){
+const maintenant=new Date();
+const reference=Date.UTC(2000,0,6,18,14);
+const cycle=29.530588853;
+const ecart=(maintenant.getTime()-reference)/86400000;
+const age=((ecart%cycle)+cycle)%cycle;
+const fraction=age/cycle;
+const jour=Math.min(29,Math.floor(age)+1);
+const phase=Math.round(fraction*8)%8;
+const lumiere=Math.round((1-Math.cos(2*Math.PI*fraction))*50);
+
+document.getElementById("date").textContent=maintenant.toLocaleDateString("fr-FR",{
+weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:"Pacific/Noumea"
+});
+
+document.getElementById("lune").textContent=symboles[phase];
+document.getElementById("phase").textContent=phases[phase];
+document.getElementById("age").textContent="Jour lunaire : "+jour+" (estimé)";
+document.getElementById("illumination").textContent="Illumination : "+lumiere+" %";
+const resultat=document.getElementById("resultat");
+const texte=jours[jour-1];
+resultat.textContent=texte;
+
+if(texte.includes("auvais")){
+resultat.style.color="#ff9999";
+}else if(texte.includes("xcellent")){
+resultat.style.color="#86efac";
+}else if(texte.includes("oyen")){
+resultat.style.color="#facc75";
+}else{
+resultat.style.color="#bde88a";
+}
+
+return jour;
+}
+
+liste.value=calculLune()-1;
 conseil();
+setInterval(calculLune,60000);
 </script>
 </body>
+</html>
+
 </html>
