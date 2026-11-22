@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 200 200">
+<rect width="200" height="200" rx="39" fill="#092b3d"/>
+<path d="M4 119 Q43 98 83 119 T161 119 T196 118 V157 H4Z" fill="#15465b"/>
+<path d="M9 135 Q48 114 88 135 T168 135 T191 135" stroke="#23b8cc" stroke-width="4" fill="none"/>
+<g transform="translate(13 5)">
+<path d="M23 78 L48 59 L48 71 Q86 37 126 80 Q86 123 48 89 L48 99Z" fill="#79dfed"/>
+<circle cx="110" cy="76" r="4" fill="#092b3d"/>
+<path d="M147 24 V86 C147 111 123 118 117 96" stroke="#e4e9ed" stroke-width="5" stroke-linecap="round" fill="none"/>
+<path d="M117 96 L115 106 L126 103" fill="#e4e9ed"/>
+<circle cx="147" cy="19" r="5" stroke="#e4e9ed" stroke-width="3" fill="none"/>
+</g>
+<text x="100" y="174" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" font-weight="bold" fill="#ffffff">PÊCHE NC</text>
+</svg>
