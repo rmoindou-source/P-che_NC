@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#092b3d">
+  <!-- Styles intégrés pour un seul fichier -->
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+  <style>
+
+:root{color-scheme:dark;--bg:#061d2b;--surface:#10384b;--line:#2b6273;--text:#eefbff;--muted:#bbd6de;--accent:#51e2c2;--blue:#3fa8d2}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(180deg,#082d40,#061d2b 40%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.55}.container{width:min(100% - 30px,900px);margin:auto}.hero{padding:34px 0 40px;background:radial-gradient(circle at 85% 5%,#257b8b 0,transparent 42%),linear-gradient(135deg,#063447,#0b5b69);border-bottom:1px solid #347b85}.brand{font-size:1.25rem;font-weight:800;margin:0 0 18px;display:flex;align-items:center;gap:8px}.brand span:last-child{font-size:.8rem;color:#062c36;background:var(--accent);border-radius:100px;padding:3px 10px}h1{font-size:clamp(2.1rem,8vw,3.5rem);line-height:1.1;margin:0 0 12px;letter-spacing:-.03em}.subtitle{color:#d6f5f4;margin:0 0 25px;max-width:36rem}.sector{padding:16px;border:1px solid #5c9ca4;border-radius:17px;background:#062f40a8}.sector label,section label{display:block;font-weight:700;margin-bottom:8px}select{display:block;width:100%;padding:12px;border-radius:10px;border:1px solid #80bac3;background:#092d3d;color:#fff;font-size:1rem}small{display:block;color:var(--muted);font-size:.82rem;margin-top:9px}main{padding-bottom:35px}nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:-22px 0 25px;position:relative}nav a{display:flex;flex-direction:column;min-height:120px;padding:15px;text-decoration:none;color:var(--text);border:1px solid var(--line);border-radius:16px;background:#12455b;box-shadow:0 8px 24px #00152244}nav a strong{font-size:.95rem}nav a small{margin:1px 0 0}.nav-icon{font-size:1.55rem;color:var(--accent);line-height:1.2;margin-bottom:9px}section{background:linear-gradient(145deg,#103c50,#0b2e41);border:1px solid var(--line);border-radius:18px;padding:21px;margin:17px 0;box-shadow:0 5px 20px #00162330}section h2{font-size:1.4rem;margin:0 0 8px}section h3{font-size:1.05rem;margin:17px 0 5px}section p{color:#d4e8ed;margin:8px 0 14px}.links{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}.action{display:inline-flex;justify-content:center;align-items:center;min-height:45px;padding:11px 15px;border:0;border-radius:11px;background:var(--accent);color:#06333e;text-decoration:none;font-weight:800;font-size:.92rem;cursor:pointer}.action.secondary{background:#214f63;color:#f2fcff;border:1px solid #508397}iframe{width:100%;height:330px;border:1px solid #538495;border-radius:12px;background:#e5eff0}.moon{display:flex;align-items:center;gap:17px;padding:12px 0}.moon>span{font-size:4.5rem;line-height:1}.moon h3{margin:0}.moon p{margin:2px 0}.date{font-weight:700;color:var(--accent)!important}#resultat,#manuel,#gps-statut{border-left:3px solid var(--accent);padding-left:12px}footer{text-align:center;padding:20px}footer a{color:var(--accent)}a:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid #fff;outline-offset:3px}@media(min-width:650px){nav{grid-template-columns:repeat(3,minmax(0,1fr))}.hero{padding:52px 0 65px}section{padding:27px}}@media(max-width:370px){nav{grid-template-columns:1fr 1fr}nav a{padding:11px;min-height:125px}.links .action{width:100%}}
+
+  .map-switch{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}.map-switch button{border:1px solid #528b9a;background:#204d62;color:#fff;padding:13px 7px;border-radius:12px;font-weight:800}.map-switch button[aria-pressed="true"]{background:#51e2c2;color:#06333e}.marine-map{height:390px;border-radius:12px;overflow:hidden;border:1px solid #538495;background:#a7d5e6}.marine-map .leaflet-control-attribution{font-size:10px}.map-note{font-size:.85rem;color:#d2e9ed}.spot-tools{display:none}.spot-tools.active{display:block}.spot-list{padding-left:22px}.spot-list li{margin:7px 0}.spot-list button{margin-left:8px;background:#214f63;color:#fff;border:1px solid #508397;border-radius:6px;padding:4px 8px}#map-loading{color:#d4e8ed}
+  </style>
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js" defer></script>
+
+  <title>Pêche NC 2.2 – Open Waters</title>
+</head>
+<body>
+  <header class="hero" id="accueil">
+    <div class="container">
+      <p class="brand"><span aria-hidden="true">🎣</span> Pêche NC <span>2.2</span></p>
+      <h1>Préparer ma sortie</h1>
+      <p class="subtitle">Météo, marées et repères pour pêcher dans le lagon calédonien.</p>
+      <div class="sector">
+        <label for="zone">Mon secteur de pêche</label>
+        <select id="zone">
+          <option>Thio</option>
+          <option>Nouméa</option>
+          <option>Canala</option>
+          <option>Houaïlou</option>
+          <option>Hienghène</option>
+          <option>Touho</option>
+          <option>Poindimié</option>
+          <option>Koumac</option>
+          <option>Poum</option>
+          <option>Bourail</option>
+          <option>Yaté</option>
+          <option>Île des Pins</option>
+          <option>Lifou</option>
+          <option>Maré</option>
+          <option>Ouvéa</option>
+          <option>Païta</option>
+          <option>Dumbéa</option>
+          <option>Mont-Dore</option>
+          <option>Boulouparis</option>
+          <option>La Foa</option>
+          <option>Moindou</option>
+          <option>Poya</option>
+          <option>Pouembout</option>
+          <option>Koné</option>
+          <option>Voh</option>
+          <option>Kaala-Gomen</option>
+          <option>Ouégoa</option>
+          <option>Pouébo</option>
+          <option>Ponérihouen</option>
+          <option>Kouaoua</option>
+          <option>Belep</option>
+          <option>Farino</option>
+          <option>Sarraméa</option>
+        </select>
+        <small>Repère personnel. Choisissez votre zone ou votre port sur le service consulté.</small>
+      </div>
+    </div>
+  </header>
+  <main class="container">
+    <nav aria-label="Rubriques de Pêche NC">
+      <a href="#meteo"><span class="nav-icon" aria-hidden="true">↝</span><strong>Météo marine</strong><small>Vent et houle</small></a>
+      <a href="#carte"><span class="nav-icon" aria-hidden="true">⌖</span><strong>Cartes marines</strong><small>Navigation et pêche</small></a>
+      <a href="#marees"><span class="nav-icon" aria-hidden="true">≈</span><strong>Marées</strong><small>Horaires officiels</small></a>
+      <a href="#reglementation"><span class="nav-icon" aria-hidden="true">§</span><strong>Réglementation</strong><small>Quotas, tailles, espèces</small></a>
+      <a href="#ilots"><span class="nav-icon" aria-hidden="true">♧</span><strong>Protection des îlots</strong><small>Faune et accès</small></a>
+      <a href="#calendrier"><span class="nav-icon" aria-hidden="true">☾</span><strong>Calendrier lunaire</strong><small>Phase et conseils</small></a>
+    </nav>
+
+    <section id="meteo" aria-labelledby="titre-meteo">
+      <h2 id="titre-meteo">Météo marine</h2>
+      <p>Consultez le vent et les vagues sur Windy, puis vérifiez le bulletin de Météo-France Nouvelle-Calédonie.</p>
+      <div class="links">
+        <a class="action" href="https://www.windy.com/?waves,-22.28,166.45,8" target="_blank" rel="noopener noreferrer">Prévisions Windy</a>
+        <a class="action secondary" href="https://meteo.nc/fr/marine/lagon" target="_blank" rel="noopener noreferrer">Bulletin lagon · Météo-France NC</a>
+      </div>
+    </section>
+
+    <section id="carte" aria-labelledby="titre-carte">
+      <h2 id="titre-carte">Carte du lagon et GPS</h2>
+      <p>Deux cartes au choix : navigation et pêche, avec vos repères personnels.</p>
+      <div class="map-switch" role="group" aria-label="Choisir le type de carte">
+        <button type="button" id="mode-navigation" aria-pressed="true">⚓ Navigation</button>
+        <button type="button" id="mode-peche" aria-pressed="false">🎣 Pêche</button>
+      </div>
+      <p id="map-description" class="map-note">Repérez les balises et marques maritimes avec Open Waters Seamap.</p>
+      <div id="marine-map" class="marine-map" aria-label="Carte interactive du lagon de Nouvelle-Calédonie"></div>
+      <p id="map-loading">Chargement de la carte…</p>
+      <div id="spot-tools" class="spot-tools">
+        <p>Touchez un endroit sur la carte, puis enregistrez votre point.</p>
+        <p id="spot-coordinates">Aucun point sélectionné.</p>
+        <button class="action" id="enregistrer-point" type="button">+ Enregistrer ce coin de pêche</button>
+        <h3>Mes coins de pêche</h3><ol id="spot-list" class="spot-list"></ol>
+      </div>
+      <div class="links"><button class="action" id="localiser" type="button">📍 Afficher ma position GPS</button></div>
+      <p id="gps-statut" role="status"></p>
+      <small>Cartes Open Waters Seamap / Seascape, avec attribution des sources affichée sur la carte. Profondeurs approximatives, données non vérifiées pour la navigation. Ne remplace pas une carte marine officielle à jour ni les instruments de navigation. Internet requis ; GPS sur HTTPS. Les points de pêche sont conservés localement dans ce navigateur lorsque le stockage est autorisé.</small>
+    </section>
+
+    <section id="marees" aria-labelledby="titre-marees">
+      <h2 id="titre-marees">Marées</h2>
+      <p>Sélectionnez le port de référence sur le portail du Shom pour consulter les hauteurs et horaires de pleine et basse mer.</p>
+      <div class="links">
+        <a class="action" href="https://maree.shom.fr/" target="_blank" rel="noopener noreferrer">Horaires officiels du Shom</a>
+        <a class="action secondary" href="https://www.province-nord.nc/parutions/agenda-marees-province-nord-2026" target="_blank" rel="noopener noreferrer">Agenda 2026 · Province Nord</a>
+      </div>
+    </section>
+
+    <section id="reglementation" aria-labelledby="titre-reglementation">
+      <h2 id="titre-reglementation">Réglementation de la pêche</h2>
+      <p>Vérifiez les quotas, les tailles minimales, les espèces protégées et les restrictions de pêche auprès de l’autorité compétente pour votre zone.</p>
+      <div class="links">
+        <a class="action secondary" href="https://www.province-sud.nc/guides/environnement/guide-du-lagon/" target="_blank" rel="noopener noreferrer">Province Sud · Guide du lagon</a>
+        <a class="action secondary" href="https://www.province-nord.nc/parutions/agenda-marees-province-nord-2026" target="_blank" rel="noopener noreferrer">Province Nord · Règles de pêche</a>
+        <a class="action secondary" href="https://www.province-iles.nc/sites/default/files/2024-04/CEPIL2024%20version%20WEB%20VF.pdf" target="_blank" rel="noopener noreferrer">Îles Loyauté · Code de l’environnement (PDF)</a>
+      </div>
+    </section>
+
+    <section id="ilots" aria-labelledby="titre-ilots">
+      <h2 id="titre-ilots">Protection des îlots</h2>
+      <p>Avant de débarquer, consultez les restrictions d’accès et les mesures de protection des sites de ponte des tortues et de nidification des oiseaux marins.</p>
+      <div class="links">
+        <a class="action" href="https://www.province-sud.nc/environnement/ilots/ilots-accessibles-au-public-en-temps-reel/" target="_blank" rel="noopener noreferrer">Province Sud · Accès aux îlots</a>
+        <a class="action secondary" href="https://www.province-sud.nc/environnement/nos-actions-environnementales/evolutions-codenv/" target="_blank" rel="noopener noreferrer">Province Sud · Ponte et nidification</a>
+        <a class="action secondary" href="https://www.province-nord.nc/environnement/protection" target="_blank" rel="noopener noreferrer">Province Nord · Aires protégées</a>
+      </div>
+    </section>
+
+    <section id="calendrier" aria-labelledby="titre-calendrier">
+      <h2 id="titre-calendrier">Calendrier lunaire</h2>
+      <p id="date" class="date"></p>
+      <div class="moon">
+        <span id="lune" aria-hidden="true"></span>
+        <div>
+          <h3 id="phase"></h3>
+          <p id="age"></p>
+          <p id="illumination"></p>
+        </div>
+      </div>
+      <h3>Conseil de pêche du jour</h3>
+      <p id="resultat"></p>
+      <label for="jour">Consulter les 29 jours lunaires</label>
+      <select id="jour"></select>
+      <p id="manuel" role="status"></p>
+      <small>Calcul lunaire approximatif. Conseils traditionnels, sans garantie de capture.</small>
+    </section>
+    <footer><a href="#accueil">Retour à l’accueil ↑</a></footer>
+  </main>
+<script>(()=>{'use strict';
+const $=id=>document.getElementById(id);
+const zone=$('zone');
+try{const saved=localStorage.getItem('peche-nc-zone');if(saved&&[...zone.options].some(o=>o.value===saved))zone.value=saved;}catch(e){}
+zone.addEventListener('change',()=>{try{localStorage.setItem('peche-nc-zone',zone.value)}catch(e){}});
+const dayMs=86400000, cycle=29.530588853, epoch=Date.UTC(2000,0,6,18,14);
+const today=new Date();
+const ageAt=d=>{const utc=Date.UTC(d.getFullYear(),d.getMonth(),d.getDate(),12);return ((utc-epoch)/dayMs%cycle+cycle)%cycle};
+const phaseName=a=>a<1.84566?'Nouvelle lune':a<5.53699?'Premier croissant':a<9.22831?'Premier quartier':a<12.91963?'Lune gibbeuse croissante':a<16.61096?'Pleine lune':a<20.30228?'Lune gibbeuse décroissante':a<23.99361?'Dernier quartier':a<27.68493?'Dernier croissant':'Nouvelle lune';
+const emoji=a=>a<1.84566||a>=27.68493?'🌑':a<5.53699?'🌒':a<9.22831?'🌓':a<12.91963?'🌔':a<16.61096?'🌕':a<20.30228?'🌖':a<23.99361?'🌗':'🌘';
+const tips=[
+'Préparez votre matériel et vérifiez les conditions en mer avant de partir.',
+'Observez le courant et les changements de lumière.',
+'Privilégiez une sortie courte avec une météo favorable.',
+'Comparez les conditions du matin et du soir.',
+'Inspectez vos lignes, hameçons et équipements de sécurité.',
+'Observez les zones de passage sans déranger les habitats.',
+'Vérifiez les marées avant de choisir votre horaire.',
+'Restez attentif aux changements de vent.',
+'Pensez à prévenir un proche de votre trajet.',
+'Privilégiez les secteurs autorisés et connus.',
+'Veillez à respecter les tailles minimales de capture.',
+'Gardez une marge de sécurité pour le retour.',
+'Profitez de la sortie pour observer le lagon.',
+'Contrôlez les prévisions de houle.',
+'Prévoyez suffisamment d’eau et une protection solaire.',
+'Évitez de débarquer sur un îlot dont l’accès est restreint.',
+'Vérifiez les zones de protection de la faune.',
+'Adaptez votre sortie à la visibilité et aux courants.',
+'Respectez les périodes de fermeture de la pêche.',
+'Vérifiez vos équipements de communication.',
+'Consultez les bulletins météo officiels.',
+'Privilégiez une pêche responsable et sélective.',
+'Remettez à l’eau les prises interdites dans de bonnes conditions.',
+'Contrôlez les horaires de marée au port de référence.',
+'Évitez de naviguer si la météo se dégrade.',
+'Emportez un moyen de signaler votre position.',
+'Ne laissez aucun déchet sur les îlots.',
+'Notez vos observations pour une prochaine sortie.',
+'Préparez la prochaine sortie selon les conditions réelles.'
+];
+function render(d,manual=false){const age=ageAt(d),n=Math.floor(age)%29,illum=Math.round((1-Math.cos(2*Math.PI*age/cycle))*50);$('date').textContent=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});$('lune').textContent=emoji(age);$('phase').textContent=phaseName(age);$('age').textContent='Âge lunaire estimé : '+age.toFixed(1)+' jours';$('illumination').textContent='Éclairage estimé : '+illum+' %';$('resultat').textContent=tips[n];if(manual)$('manuel').textContent='Jour lunaire '+(n+1)+' sur 29. Indication approximative.';}
+const select=$('jour');for(let i=0;i<29;i++){const opt=document.createElement('option');opt.value=String(i);opt.textContent='Jour lunaire '+(i+1);select.append(opt)}
+select.value=String(Math.floor(ageAt(today))%29);render(today);
+select.addEventListener('change',()=>{const target=Number(select.value),current=Math.floor(ageAt(today))%29,offset=(target-current+29)%29;const d=new Date(today.getFullYear(),today.getMonth(),today.getDate()+offset);render(d,true)});
+// Cartes Open Waters : deux styles MapLibre et points de pêche personnels.
+let marineMap, positionMarker, mapMode='navigation', selectedPoint=null;
+let spotMarkers=[];
+const status=$('gps-statut');
+const sectors={'Thio':[-21.61,166.22],'Nouméa':[-22.275,166.458],'Canala':[-21.52,165.96],'Hienghène':[-20.69,164.94],'Koumac':[-20.56,164.28],'Bourail':[-21.57,165.49],'Lifou':[-20.92,167.24],'Maré':[-21.52,167.99],'Ouvéa':[-20.65,166.56]};
+const initial=sectors[$('zone').value]||sectors.Thio;
+const styles={navigation:'https://tiles.openwaters.io/seamap/style.json',peche:'https://tiles.openwaters.io/seascape/style.json'};
+let spots=[];
+try{spots=JSON.parse(localStorage.getItem('peche-nc-spots-v1')||'[]');if(!Array.isArray(spots))spots=[]}catch(e){spots=[]}
+function saveSpots(){try{localStorage.setItem('peche-nc-spots-v1',JSON.stringify(spots));return true}catch(e){status.textContent='Sauvegarde locale indisponible. Réessayez sur le site HTTPS.';return false}}
+function renderSpots(){spotMarkers.forEach(m=>m.remove());spotMarkers=[];const list=$('spot-list');list.replaceChildren();spots.forEach((spot,i)=>{if(marineMap){const el=document.createElement('div');el.textContent='🎣';el.style.cssText='font-size:26px;cursor:pointer;text-shadow:0 1px 3px white';spotMarkers.push(new maplibregl.Marker({element:el}).setLngLat([spot.lon,spot.lat]).setPopup(new maplibregl.Popup().setText(spot.name)).addTo(marineMap))}const li=document.createElement('li');const btn=document.createElement('button');btn.type='button';btn.textContent='Supprimer';btn.addEventListener('click',()=>{spots.splice(i,1);saveSpots();renderSpots()});li.append(document.createTextNode(spot.name+' ('+spot.lat.toFixed(4)+', '+spot.lon.toFixed(4)+') '),btn);list.append(li)});if(!spots.length){const li=document.createElement('li');li.textContent='Aucun point enregistré.';list.append(li)}}
+function switchMap(mode){mapMode=mode;const fishing=mode==='peche';$('mode-navigation').setAttribute('aria-pressed',String(!fishing));$('mode-peche').setAttribute('aria-pressed',String(fishing));$('spot-tools').classList.toggle('active',fishing);$('map-description').textContent=fishing?'Courbes de profondeur et reliefs sous-marins Open Waters Seascape. Profondeurs approximatives.':'Repères maritimes, récifs et profondeurs Open Waters Seamap. Carte non destinée à la navigation.';if(marineMap){$('map-loading').hidden=false;$('map-loading').textContent='Chargement du mode '+(fishing?'Pêche':'Navigation')+'…';marineMap.setStyle(styles[mode]);marineMap.resize()}}
+if(typeof maplibregl!=='undefined'){
+ try{
+ marineMap=new maplibregl.Map({container:'marine-map',style:styles.navigation,center:[initial[1],initial[0]],zoom:10,attributionControl:true});
+ marineMap.addControl(new maplibregl.NavigationControl(),'top-right');
+ marineMap.on('load',()=>{$('map-loading').hidden=true;renderSpots()});
+ marineMap.on('style.load',()=>{$('map-loading').hidden=true;renderSpots()});
+ marineMap.on('error',e=>{if(e.error){$('map-loading').hidden=false;$('map-loading').textContent='Certaines données cartographiques ne chargent pas. Vérifiez Internet ou ouvrez la version publiée sur HTTPS.'}});
+ marineMap.on('click',e=>{if(mapMode==='peche'){selectedPoint=e.lngLat;$('spot-coordinates').textContent='Point sélectionné : '+e.lngLat.lat.toFixed(5)+', '+e.lngLat.lng.toFixed(5)}});
+ }catch(e){$('map-loading').textContent='Impossible de démarrer la carte : '+e.message}
+}else{$('map-loading').textContent='Bibliothèque de cartes indisponible. Vérifiez votre connexion Internet.'}
+$('mode-navigation').addEventListener('click',()=>switchMap('navigation'));
+$('mode-peche').addEventListener('click',()=>switchMap('peche'));
+$('zone').addEventListener('change',()=>{if(marineMap){const c=sectors[$('zone').value]||initial;marineMap.flyTo({center:[c[1],c[0]],zoom:10})}});
+$('enregistrer-point').addEventListener('click',()=>{if(!selectedPoint){status.textContent='Touchez d’abord un endroit sur la carte de pêche.';return}const name=prompt('Nom de ce coin de pêche :','Mon coin de pêche');if(!name||!name.trim())return;spots.push({name:name.trim().slice(0,60),lat:selectedPoint.lat,lon:selectedPoint.lng});saveSpots();renderSpots();status.textContent='Point de pêche ajouté.'});
+$('localiser').addEventListener('click',()=>{if(!navigator.geolocation){status.textContent='GPS non disponible dans ce navigateur.';return}if(!window.isSecureContext){status.textContent='GPS bloqué dans le fichier téléchargé. Ouvrez l’application sur HTTPS pour activer la localisation.';return}status.textContent='Recherche de votre position…';navigator.geolocation.getCurrentPosition(pos=>{const lat=pos.coords.latitude,lon=pos.coords.longitude;if(marineMap){if(positionMarker)positionMarker.remove();const el=document.createElement('div');el.style.cssText='width:19px;height:19px;border:4px solid white;border-radius:50%;background:#1676df;box-shadow:0 0 0 2px #1676df';positionMarker=new maplibregl.Marker({element:el}).setLngLat([lon,lat]).addTo(marineMap);marineMap.flyTo({center:[lon,lat],zoom:13})}status.textContent='Position GPS trouvée (précision estimée : '+Math.round(pos.coords.accuracy)+' m).';},err=>{status.textContent=err.code===1?'Accès GPS refusé. Vérifiez les autorisations du navigateur.':'Position GPS indisponible. Vérifiez le signal et les autorisations.'},{enableHighAccuracy:true,timeout:15000,maximumAge:60000})});
+})();</script>
+</body>
+</html>
