@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#092b3d">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <title>Pêche NC – Carte corrigée</title>
+<style>
+:root{color-scheme:dark;--bg:#061d2b;--panel:#123e50;--mint:#46dabb;--ink:#e9f7fb}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Arial,sans-serif}.container{width:min(100% - 32px,900px);margin:auto}.hero{padding:34px 0 70px;background:linear-gradient(120deg,#073042,#126477)}.brand{font-weight:800;font-size:24px;display:flex;align-items:center;gap:8px}.brand span{background:var(--mint);color:#063b3b;border-radius:30px;padding:3px 12px;font-size:14px}h1{font-size:clamp(32px,7vw,48px);line-height:1.15;margin:20px 0}h2{font-size:25px;margin:0 0 14px}h3{margin-bottom:5px}.subtitle{font-size:19px;color:#d0e9ed}.sector,section{background:var(--panel);border:1px solid #386b79;border-radius:22px;padding:22px;margin:24px 0}.sector{max-width:600px}.sector label,label{display:block;font-weight:700;margin-bottom:10px}select{background:#092c3c;color:white;border:1px solid #8bbbc5;border-radius:12px;padding:14px;width:100%;font-size:17px}small{display:block;color:#c5dbe1;margin-top:12px}main{margin-top:-55px;position:relative}nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}nav a{background:#16495e;color:white;border:1px solid #376e80;border-radius:18px;text-decoration:none;padding:18px;display:flex;flex-direction:column;gap:4px}nav strong{font-size:16px}nav small{margin:0}.nav-icon{font-size:25px;color:var(--mint)}.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.action{display:inline-block;text-align:center;background:var(--mint);border:0;border-radius:12px;color:#053d3b;padding:13px 17px;font:700 15px system-ui;text-decoration:none;cursor:pointer}.action.secondary{background:#23596b;color:white;border:1px solid #6b9aa7}#carte-lagon{height:420px;background:#acd6e5;border:2px solid #6a9cab;border-radius:16px;overflow:hidden}#gps-statut{min-height:1.5em;color:#bdf8e7}.moon{display:flex;gap:18px;align-items:center}.moon #lune{font-size:64px}.date{color:#bdf8e7}footer{padding:25px;text-align:center}footer a{color:var(--mint)}.leaflet-container{color:#222}@media(max-width:420px){.container{width:min(100% - 24px,900px)}section,.sector{padding:16px}nav a{padding:14px}#carte-lagon{height:380px}}
+</style>
+</head>
+<body>
+  <header class="hero" id="accueil">
+    <div class="container">
+      <p class="brand"><img src="./icon.svg" width="36" height="36" alt=""> Pêche NC <span>2.0</span></p>
+      <h1>Préparer ma sortie</h1>
+      <p class="subtitle">Météo, marées et repères pour pêcher dans le lagon calédonien.</p>
+      <div class="sector">
+        <label for="zone">Mon secteur de pêche</label>
+        <select id="zone">
+          <option>Thio</option>
+          <option>Nouméa</option>
+          <option>Canala</option>
+          <option>Houaïlou</option>
+          <option>Hienghène</option>
+          <option>Touho</option>
+          <option>Poindimié</option>
+          <option>Koumac</option>
+          <option>Poum</option>
+          <option>Bourail</option>
+          <option>Yaté</option>
+          <option>Île des Pins</option>
+          <option>Lifou</option>
+          <option>Maré</option>
+          <option>Ouvéa</option>
+          <option>Païta</option>
+          <option>Dumbéa</option>
+          <option>Mont-Dore</option>
+          <option>Boulouparis</option>
+          <option>La Foa</option>
+          <option>Moindou</option>
+          <option>Poya</option>
+          <option>Pouembout</option>
+          <option>Koné</option>
+          <option>Voh</option>
+          <option>Kaala-Gomen</option>
+          <option>Ouégoa</option>
+          <option>Pouébo</option>
+          <option>Ponérihouen</option>
+          <option>Kouaoua</option>
+          <option>Belep</option>
+          <option>Farino</option>
+          <option>Sarraméa</option>
+        </select>
+        <small>Repère personnel. Choisissez votre zone ou votre port sur le service consulté.</small>
+      </div>
+    </div>
+  </header>
+  <main class="container">
+    <nav aria-label="Rubriques de Pêche NC">
+      <a href="#meteo"><span class="nav-icon" aria-hidden="true">↝</span><strong>Météo marine</strong><small>Vent et houle</small></a>
+      <a href="#carte"><span class="nav-icon" aria-hidden="true">⌖</span><strong>Carte et GPS</strong><small>Explorer le lagon</small></a>
+      <a href="#marees"><span class="nav-icon" aria-hidden="true">≈</span><strong>Marées</strong><small>Horaires officiels</small></a>
+      <a href="#reglementation"><span class="nav-icon" aria-hidden="true">§</span><strong>Réglementation</strong><small>Quotas, tailles, espèces</small></a>
+      <a href="#ilots"><span class="nav-icon" aria-hidden="true">♧</span><strong>Protection des îlots</strong><small>Faune et accès</small></a>
+      <a href="#calendrier"><span class="nav-icon" aria-hidden="true">☾</span><strong>Calendrier lunaire</strong><small>Phase et conseils</small></a>
+    </nav>
+
+    <section id="meteo" aria-labelledby="titre-meteo">
+      <h2 id="titre-meteo">Météo marine</h2>
+      <p>Consultez le vent et les vagues sur Windy, puis vérifiez le bulletin de Météo-France Nouvelle-Calédonie.</p>
+      <div class="links">
+        <a class="action" href="https://www.windy.com/?waves,-22.28,166.45,8" target="_blank" rel="noopener noreferrer">Prévisions Windy</a>
+        <a class="action secondary" href="https://meteo.nc/fr/marine/lagon" target="_blank" rel="noopener noreferrer">Bulletin lagon · Météo-France NC</a>
+      </div>
+    </section>
+
+    <section id="carte" aria-labelledby="titre-carte">
+      <h2 id="titre-carte">Carte du lagon et GPS</h2>
+      <p>Déplacez ou zoomez la carte. Vous pouvez aussi la centrer sur votre position.</p>
+      <div id="carte-lagon" role="region" aria-label="Carte interactive du lagon"></div>
+      <div class="links"><button class="action secondary" type="button" id="toggle-seamarks">Afficher / masquer les balises maritimes</button><a class="action secondary" href="https://www.openstreetmap.org/#map=11/-21.61/166.22" target="_blank" rel="noopener noreferrer">Ouvrir la carte externe</a></div>
+      <div class="links">
+        <button class="action" id="localiser" type="button">Afficher ma position GPS</button>
+        <a class="action secondary" href="https://explorateur-carto.georep.nc/" target="_blank" rel="noopener noreferrer">Ouvrir Géorep</a>
+      </div>
+      <p id="gps-statut" role="status"></p>
+      <small>Carte OpenStreetMap avec balises OpenSeaMap. Connexion Internet requise. Non destinée à la navigation maritime : ne remplace pas les cartes officielles.</small>
+    </section>
+
+    <section id="marees" aria-labelledby="titre-marees">
+      <h2 id="titre-marees">Marées</h2>
+      <p>Sélectionnez le port de référence sur le portail du Shom pour consulter les hauteurs et horaires de pleine et basse mer.</p>
+      <div class="links">
+        <a class="action" href="https://maree.shom.fr/" target="_blank" rel="noopener noreferrer">Horaires officiels du Shom</a>
+        <a class="action secondary" href="https://www.province-nord.nc/parutions/agenda-marees-province-nord-2026" target="_blank" rel="noopener noreferrer">Agenda 2026 · Province Nord</a>
+      </div>
+    </section>
+
+    <section id="reglementation" aria-labelledby="titre-reglementation">
+      <h2 id="titre-reglementation">Réglementation de la pêche</h2>
+      <p>Vérifiez les quotas, les tailles minimales, les espèces protégées et les restrictions de pêche auprès de l’autorité compétente pour votre zone.</p>
+      <div class="links">
+        <a class="action secondary" href="https://www.province-sud.nc/guides/environnement/guide-du-lagon/" target="_blank" rel="noopener noreferrer">Province Sud · Guide du lagon</a>
+        <a class="action secondary" href="https://www.province-nord.nc/parutions/agenda-marees-province-nord-2026" target="_blank" rel="noopener noreferrer">Province Nord · Règles de pêche</a>
+        <a class="action secondary" href="https://www.province-iles.nc/sites/default/files/2024-04/CEPIL2024%20version%20WEB%20VF.pdf" target="_blank" rel="noopener noreferrer">Îles Loyauté · Code de l’environnement (PDF)</a>
+      </div>
+    </section>
+
+    <section id="ilots" aria-labelledby="titre-ilots">
+      <h2 id="titre-ilots">Protection des îlots</h2>
+      <p>Avant de débarquer, consultez les restrictions d’accès et les mesures de protection des sites de ponte des tortues et de nidification des oiseaux marins.</p>
+      <div class="links">
+        <a class="action" href="https://www.province-sud.nc/environnement/ilots/ilots-accessibles-au-public-en-temps-reel/" target="_blank" rel="noopener noreferrer">Province Sud · Accès aux îlots</a>
+        <a class="action secondary" href="https://www.province-sud.nc/environnement/nos-actions-environnementales/evolutions-codenv/" target="_blank" rel="noopener noreferrer">Province Sud · Ponte et nidification</a>
+        <a class="action secondary" href="https://www.province-nord.nc/environnement/protection" target="_blank" rel="noopener noreferrer">Province Nord · Aires protégées</a>
+      </div>
+    </section>
+
+    <section id="calendrier" aria-labelledby="titre-calendrier">
+      <h2 id="titre-calendrier">Calendrier lunaire</h2>
+      <p id="date" class="date"></p>
+      <div class="moon">
+        <span id="lune" aria-hidden="true"></span>
+        <div>
+          <h3 id="phase"></h3>
+          <p id="age"></p>
+          <p id="illumination"></p>
+        </div>
+      </div>
+      <h3>Conseil de pêche du jour</h3>
+      <p id="resultat"></p>
+      <label for="jour">Consulter les 29 jours lunaires</label>
+      <select id="jour"></select>
+      <p id="manuel" role="status"></p>
+      <small>Calcul lunaire approximatif. Conseils traditionnels, sans garantie de capture.</small>
+    </section>
+    <footer><a href="#accueil">Retour à l’accueil ↑</a></footer>
+  </main>
+<script>
+(function(){'use strict';
+const $=id=>document.getElementById(id);
+const sectors={'Thio':[-21.61,166.22],'Nouméa':[-22.275,166.458],'Canala':[-21.52,165.96],'Houaïlou':[-21.28,165.62],'Hienghène':[-20.69,164.94],'Touho':[-20.79,165.23],'Poindimié':[-20.94,165.33],'Koumac':[-20.56,164.28],'Poum':[-20.23,164.02],'Bourail':[-21.57,165.49],'Yaté':[-22.16,166.9],'Île des Pins':[-22.63,167.47],'Lifou':[-20.92,167.24],'Maré':[-21.52,167.99],'Ouvéa':[-20.65,166.56],'Païta':[-22.13,166.36],'Dumbéa':[-22.15,166.45],'Mont-Dore':[-22.27,166.57],'Boulouparis':[-21.86,166.05],'La Foa':[-21.71,165.83],'Moindou':[-21.69,165.68],'Poya':[-21.35,165.15],'Pouembout':[-21.13,164.9],'Koné':[-21.06,164.86],'Voh':[-20.96,164.69],'Kaala-Gomen':[-20.67,164.39],'Ouégoa':[-20.34,164.44],'Pouébo':[-20.4,164.59],'Ponérihouen':[-21.08,165.4],'Kouaoua':[-21.4,165.82],'Belep':[-19.72,163.66],'Farino':[-21.67,165.78],'Sarraméa':[-21.64,165.84]};
+let map,mark,overlay;
+if(window.L){
+map=L.map('carte-lagon',{zoomControl:true}).setView(sectors.Thio,10);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);
+overlay=L.tileLayer('https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenSeaMap contributors',opacity:0.9}).addTo(map);
+$('toggle-seamarks').addEventListener('click',()=>{if(map.hasLayer(overlay)){map.removeLayer(overlay)}else{overlay.addTo(map)}});
+$('zone').addEventListener('change',()=>map.setView(sectors[$('zone').value]||sectors.Thio,10));
+setTimeout(()=>map.invalidateSize(),350);
+}else{$('gps-statut').textContent='La carte ne peut pas démarrer. Utilisez le lien « Ouvrir la carte externe ».'}
+$('localiser').addEventListener('click',()=>{const st=$('gps-statut');if(!navigator.geolocation){st.textContent='GPS non disponible.';return}st.textContent='Recherche de votre position…';navigator.geolocation.getCurrentPosition(p=>{const ll=[p.coords.latitude,p.coords.longitude];if(map){if(mark)map.removeLayer(mark);mark=L.circleMarker(ll,{radius:9,color:'#fff',weight:3,fillColor:'#1373db',fillOpacity:1}).addTo(map);map.setView(ll,13)}st.textContent='Position GPS trouvée (précision estimée : '+Math.round(p.coords.accuracy)+' m).';},e=>{st.textContent=e.code===1?'Autorisation GPS refusée.':'Position GPS indisponible. Vérifiez les autorisations et le signal.'},{enableHighAccuracy:true,timeout:15000,maximumAge:60000})});
+const cycle=29.530588853,epoch=Date.UTC(2000,0,6,18,14),day=86400000;
+function ageAt(d){const utc=Date.UTC(d.getFullYear(),d.getMonth(),d.getDate(),12);return ((utc-epoch)/day%cycle+cycle)%cycle}
+const names=['Nouvelle lune','Premier croissant','Premier quartier','Lune gibbeuse croissante','Pleine lune','Lune gibbeuse décroissante','Dernier quartier','Dernier croissant'];
+const moons=['🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘'];
+function phase(a){return a<1.84566?0:a<5.53699?1:a<9.22831?2:a<12.91963?3:a<16.61096?4:a<20.30228?5:a<23.99361?6:a<27.68493?7:0}
+const advice=['Consultez les marées et la météo avant de partir.','Observez les courants et la lumière.','Vérifiez le vent et la houle.','Respectez les tailles minimales et les zones protégées.','Prévenez un proche de votre itinéraire.','Gardez une marge de sécurité pour le retour.','Protégez les récifs et ne laissez aucun déchet.'];
+const now=new Date(),sel=$('jour');for(let i=0;i<29;i++){const o=document.createElement('option');o.value=i;o.textContent='Jour lunaire '+(i+1);sel.append(o)}
+function render(d){const a=ageAt(d),n=Math.floor(a)%29,i=phase(a);$('date').textContent=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});$('lune').textContent=moons[i];$('phase').textContent=names[i];$('age').textContent='Âge lunaire estimé : '+a.toFixed(1)+' jours';$('illumination').textContent='Éclairage estimé : '+Math.round((1-Math.cos(2*Math.PI*a/cycle))*50)+' %';$('resultat').textContent=advice[n%advice.length];$('manuel').textContent='Jour lunaire '+(n+1)+' sur 29. Indication approximative.'}
+sel.value=Math.floor(ageAt(now))%29;render(now);sel.addEventListener('change',()=>{const off=(Number(sel.value)-Math.floor(ageAt(now))%29+29)%29;render(new Date(now.getFullYear(),now.getMonth(),now.getDate()+off))});
+})();
+</script>
+</body>
+</html>
