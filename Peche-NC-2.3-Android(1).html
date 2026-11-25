@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#092b3d">
+  
+  <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiB2aWV3Qm94PSIwIDAgMjAwIDIwMCI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiByeD0iMzkiIGZpbGw9IiMwOTJiM2QiLz4KPHBhdGggZD0iTTQgMTE5IFE0MyA5OCA4MyAxMTkgVDE2MSAxMTkgVDE5NiAxMTggVjE1NyBINFoiIGZpbGw9IiMxNTQ2NWIiLz4KPHBhdGggZD0iTTkgMTM1IFE0OCAxMTQgODggMTM1IFQxNjggMTM1IFQxOTEgMTM1IiBzdHJva2U9IiMyM2I4Y2MiIHN0cm9rZS13aWR0aD0iNCIgZmlsbD0ibm9uZSIvPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMyA1KSI+CjxwYXRoIGQ9Ik0yMyA3OCBMNDggNTkgTDQ4IDcxIFE4NiAzNyAxMjYgODAgUTg2IDEyMyA0OCA4OSBMNDggOTlaIiBmaWxsPSIjNzlkZmVkIi8+CjxjaXJjbGUgY3g9IjExMCIgY3k9Ijc2IiByPSI0IiBmaWxsPSIjMDkyYjNkIi8+CjxwYXRoIGQ9Ik0xNDcgMjQgVjg2IEMxNDcgMTExIDEyMyAxMTggMTE3IDk2IiBzdHJva2U9IiNlNGU5ZWQiIHN0cm9rZS13aWR0aD0iNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBmaWxsPSJub25lIi8+CjxwYXRoIGQ9Ik0xMTcgOTYgTDExNSAxMDYgTDEyNiAxMDMiIGZpbGw9IiNlNGU5ZWQiLz4KPGNpcmNsZSBjeD0iMTQ3IiBjeT0iMTkiIHI9IjUiIHN0cm9rZT0iI2U0ZTllZCIgc3Ryb2tlLXdpZHRoPSIzIiBmaWxsPSJub25lIi8+CjwvZz4KPHRleHQgeD0iMTAwIiB5PSIxNzQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCxzYW5zLXNlcmlmIiBmb250LXNpemU9IjI1IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iI2ZmZmZmZiI+UMOKQ0hFIE5DPC90ZXh0Pgo8L3N2Zz4K" type="image/svg+xml">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <title>Pêche NC 2.3 – Version de test</title>
+<style>
+:root{color-scheme:dark;--bg:#061d2b;--panel:#123e50;--mint:#46dabb;--ink:#e9f7fb}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Arial,sans-serif}.container{width:min(100% - 32px,900px);margin:auto}.hero{padding:34px 0 70px;background:linear-gradient(120deg,#073042,#126477)}.brand{font-weight:800;font-size:24px;display:flex;align-items:center;gap:8px}.brand span{background:var(--mint);color:#063b3b;border-radius:30px;padding:3px 12px;font-size:14px}h1{font-size:clamp(32px,7vw,48px);line-height:1.15;margin:20px 0}h2{font-size:25px;margin:0 0 14px}h3{margin-bottom:5px}.subtitle{font-size:19px;color:#d0e9ed}.sector,section{background:var(--panel);border:1px solid #386b79;border-radius:22px;padding:22px;margin:24px 0}.sector{max-width:600px}.sector label,label{display:block;font-weight:700;margin-bottom:10px}select{background:#092c3c;color:white;border:1px solid #8bbbc5;border-radius:12px;padding:14px;width:100%;font-size:17px}small{display:block;color:#c5dbe1;margin-top:12px}main{margin-top:-55px;position:relative}nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}nav a{background:#16495e;color:white;border:1px solid #376e80;border-radius:18px;text-decoration:none;padding:18px;display:flex;flex-direction:column;gap:4px}nav strong{font-size:16px}nav small{margin:0}.nav-icon{font-size:25px;color:var(--mint)}.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.action{display:inline-block;text-align:center;background:var(--mint);border:0;border-radius:12px;color:#053d3b;padding:13px 17px;font:700 15px system-ui;text-decoration:none;cursor:pointer}.action.secondary{background:#23596b;color:white;border:1px solid #6b9aa7}#carte-lagon{height:420px;background:#acd6e5;border:2px solid #6a9cab;border-radius:16px;overflow:hidden}#gps-statut{min-height:1.5em;color:#bdf8e7}.moon{display:flex;gap:18px;align-items:center}.moon #lune{font-size:64px}.date{color:#bdf8e7}footer{padding:25px;text-align:center}footer a{color:var(--mint)}.leaflet-container{color:#222}@media(max-width:420px){.container{width:min(100% - 24px,900px)}section,.sector{padding:16px}nav a{padding:14px}#carte-lagon{height:380px}}
+.map-modes{display:flex;flex-wrap:wrap;gap:8px 16px;border:0;padding:0;margin:0 0 12px}
+.map-modes legend{font-weight:700;margin-bottom:4px}
+.map-modes label{display:flex;align-items:center;gap:5px;min-height:44px;margin:0}
+.map-modes input{accent-color:var(--mint)}
+.map-status{color:#bdf8e7;margin:.55em 0}
+.map-status:empty{display:none}
+#carte small a{color:var(--mint)}
+#toggle-seamarks[aria-pressed="true"]{background:var(--mint);color:#053d3b}
+#toggle-seamarks:disabled{opacity:.65;cursor:default}
+.depth-legend{margin-top:12px;padding:11px 12px;background:#092d3d;border:1px solid #548391;border-radius:12px}
+.depth-legend ul{display:flex;flex-wrap:wrap;gap:6px 12px;list-style:none;padding:0;margin:5px 0}
+.depth-legend li{display:flex;align-items:center;gap:5px;font-size:.85rem}
+.depth-legend i{width:15px;height:9px;border:1px solid #b2d2ec;border-radius:3px;background:var(--depth)}
+.depth-legend small{margin-top:4px}
+.depth-label{font:700 11px/16px system-ui,sans-serif;text-align:center;color:#123252;text-shadow:-1px -1px white,1px -1px white,-1px 1px white,1px 1px white}
+</style>
+</head>
+<body>
+  <header class="hero" id="accueil">
+    <div class="container">
+      <p class="brand"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiB2aWV3Qm94PSIwIDAgMjAwIDIwMCI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiByeD0iMzkiIGZpbGw9IiMwOTJiM2QiLz4KPHBhdGggZD0iTTQgMTE5IFE0MyA5OCA4MyAxMTkgVDE2MSAxMTkgVDE5NiAxMTggVjE1NyBINFoiIGZpbGw9IiMxNTQ2NWIiLz4KPHBhdGggZD0iTTkgMTM1IFE0OCAxMTQgODggMTM1IFQxNjggMTM1IFQxOTEgMTM1IiBzdHJva2U9IiMyM2I4Y2MiIHN0cm9rZS13aWR0aD0iNCIgZmlsbD0ibm9uZSIvPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMyA1KSI+CjxwYXRoIGQ9Ik0yMyA3OCBMNDggNTkgTDQ4IDcxIFE4NiAzNyAxMjYgODAgUTg2IDEyMyA0OCA4OSBMNDggOTlaIiBmaWxsPSIjNzlkZmVkIi8+CjxjaXJjbGUgY3g9IjExMCIgY3k9Ijc2IiByPSI0IiBmaWxsPSIjMDkyYjNkIi8+CjxwYXRoIGQ9Ik0xNDcgMjQgVjg2IEMxNDcgMTExIDEyMyAxMTggMTE3IDk2IiBzdHJva2U9IiNlNGU5ZWQiIHN0cm9rZS13aWR0aD0iNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBmaWxsPSJub25lIi8+CjxwYXRoIGQ9Ik0xMTcgOTYgTDExNSAxMDYgTDEyNiAxMDMiIGZpbGw9IiNlNGU5ZWQiLz4KPGNpcmNsZSBjeD0iMTQ3IiBjeT0iMTkiIHI9IjUiIHN0cm9rZT0iI2U0ZTllZCIgc3Ryb2tlLXdpZHRoPSIzIiBmaWxsPSJub25lIi8+CjwvZz4KPHRleHQgeD0iMTAwIiB5PSIxNzQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCxzYW5zLXNlcmlmIiBmb250LXNpemU9IjI1IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iI2ZmZmZmZiI+UMOKQ0hFIE5DPC90ZXh0Pgo8L3N2Zz4K" width="36" height="36" alt=""> Pêche NC <span>2.3 · Test</span></p>
+      <h1>Préparer ma sortie</h1>
+      <p class="subtitle">Météo, marées et repères pour pêcher dans le lagon calédonien.</p>
+      <div class="sector">
+        <label for="zone">Mon secteur de pêche</label>
+        <select id="zone">
+          <option>Thio</option>
+          <option>Nouméa</option>
+          <option>Canala</option>
+          <option>Houaïlou</option>
+          <option>Hienghène</option>
+          <option>Touho</option>
+          <option>Poindimié</option>
+          <option>Koumac</option>
+          <option>Poum</option>
+          <option>Bourail</option>
+          <option>Yaté</option>
+          <option>Île des Pins</option>
+          <option>Lifou</option>
+          <option>Maré</option>
+          <option>Ouvéa</option>
+          <option>Païta</option>
+          <option>Dumbéa</option>
+          <option>Mont-Dore</option>
+          <option>Boulouparis</option>
+          <option>La Foa</option>
+          <option>Moindou</option>
+          <option>Poya</option>
+          <option>Pouembout</option>
+          <option>Koné</option>
+          <option>Voh</option>
+          <option>Kaala-Gomen</option>
+          <option>Ouégoa</option>
+          <option>Pouébo</option>
+          <option>Ponérihouen</option>
+          <option>Kouaoua</option>
+          <option>Belep</option>
+          <option>Farino</option>
+          <option>Sarraméa</option>
+        </select>
+        <small>Repère personnel. Choisissez votre zone ou votre port sur le service consulté.</small>
+      </div>
+    </div>
+  </header>
+  <main class="container">
+    <nav aria-label="Rubriques de Pêche NC">
+      <a href="#meteo"><span class="nav-icon" aria-hidden="true">↝</span><strong>Météo marine</strong><small>Vent et houle</small></a>
+      <a href="#carte"><span class="nav-icon" aria-hidden="true">⌖</span><strong>Carte et GPS</strong><small>Explorer le lagon</small></a>
+      <a href="#marees"><span class="nav-icon" aria-hidden="true">≈</span><strong>Marées</strong><small>Horaires officiels</small></a>
+      <a href="#reglementation"><span class="nav-icon" aria-hidden="true">§</span><strong>Réglementation</strong><small>Quotas, tailles, espèces</small></a>
+      <a href="#ilots"><span class="nav-icon" aria-hidden="true">♧</span><strong>Protection des îlots</strong><small>Faune et accès</small></a>
+      <a href="#calendrier"><span class="nav-icon" aria-hidden="true">☾</span><strong>Calendrier lunaire</strong><small>Phase et conseils</small></a>
+    </nav>
+
+    <section id="meteo" aria-labelledby="titre-meteo">
+      <h2 id="titre-meteo">Météo marine</h2>
+      <p>Consultez le vent et les vagues sur Windy, puis vérifiez le bulletin de Météo-France Nouvelle-Calédonie.</p>
+      <div class="links">
+        <a class="action" href="https://www.windy.com/?waves,-22.28,166.45,8" target="_blank" rel="noopener noreferrer">Prévisions Windy</a>
+        <a class="action secondary" href="https://meteo.nc/fr/marine/lagon" target="_blank" rel="noopener noreferrer">Bulletin lagon · Météo-France NC</a>
+      </div>
+    </section>
+
+    <section id="carte" aria-labelledby="titre-carte">
+      <h2 id="titre-carte">Carte du lagon et GPS</h2>
+      <p>Déplacez ou zoomez la carte. Vous pouvez aussi la centrer sur votre position.</p>
+      <fieldset class="map-modes" id="modes-carte" disabled>
+        <legend>Mode de carte</legend>
+        <label><input type="radio" name="mode-carte" value="navigation" checked> Navigation</label>
+        <label><input type="radio" name="mode-carte" value="fonds"> Fonds marins</label>
+      </fieldset>
+      <div id="carte-lagon" role="region" aria-label="Carte interactive du lagon"></div>
+      <div class="links"><button class="action secondary" type="button" id="toggle-seamarks" aria-pressed="false" disabled>Balises OpenSeaMap : désactivées</button><a class="action secondary" href="https://www.openstreetmap.org/#map=11/-21.61/166.22" target="_blank" rel="noopener noreferrer">Ouvrir la carte externe</a></div>
+      <div class="links">
+        <button class="action" id="localiser" type="button">Afficher ma position GPS</button>
+        <a class="action secondary" href="https://explorateur-carto.georep.nc/" target="_blank" rel="noopener noreferrer">Ouvrir Géorep</a>
+      </div>
+      <p class="map-status" id="balises-statut" role="status"></p>
+      <aside id="bathymetrie-legende" class="depth-legend" aria-label="Légende des profondeurs" hidden>
+        <strong>Profondeurs en mètres</strong>
+        <ul>
+          <li><i style="--depth:#087f89"></i>0 à 5 m</li>
+          <li><i style="--depth:#247bb8"></i>&gt;5 à 20 m</li>
+          <li><i style="--depth:#244ca7"></i>&gt;20 à 50 m</li>
+          <li><i style="--depth:#172d72"></i>&gt;50 m</li>
+        </ul>
+        <small><a href="https://www.arcgis.com/home/item.html?id=3cf7131d65d94b0dba80995aeafb492c">Atlas des récifs de Nouvelle-Calédonie</a> · Andréfouët et Torres-Pulliza, 2004, IFRECOR / IRD / Géorep · Licence Ouverte.</small>
+        <small>Turquoise : faibles profondeurs relevées. Courbes rapprochées : pente plus forte. Vert : emprises récifales cartographiées, sans indication de profondeur.</small>
+      </aside>
+      <p class="map-status" id="bathymetrie-statut" role="status"></p>
+      <p id="gps-statut" role="status"></p>
+      <small>Carte de repérage : elle ne remplace pas les cartes officielles de navigation. Connexion Internet requise.</small>
+      <small>Les <a href="https://carto10.gouv.nc/public/rest/services/bathymetrie_lagons_shom/MapServer">fonds marins du SHOM diffusés par le gouvernement de la Nouvelle-Calédonie</a> couvrent uniquement les zones levées. La couverture et le niveau de détail varient selon le zoom. Une zone sans tracé n’indique pas une absence de danger.</small>
+    </section>
+
+    <section id="marees" aria-labelledby="titre-marees">
+      <h2 id="titre-marees">Marées</h2>
+      <p>Sélectionnez le port de référence sur le portail du Shom pour consulter les hauteurs et horaires de pleine et basse mer.</p>
+      <div class="links">
+        <a class="action" href="https://maree.shom.fr/" target="_blank" rel="noopener noreferrer">Horaires officiels du Shom</a>
+        <a class="action secondary" href="https://www.province-nord.nc/parutions/agenda-marees-province-nord-2026" target="_blank" rel="noopener noreferrer">Agenda 2026 · Province Nord</a>
+      </div>
+    </section>
+
+    <section id="reglementation" aria-labelledby="titre-reglementation">
+      <h2 id="titre-reglementation">Réglementation de la pêche</h2>
+      <p>Vérifiez les quotas, les tailles minimales, les espèces protégées et les restrictions de pêche auprès de l’autorité compétente pour votre zone.</p>
+      <div class="links">
+        <a class="action secondary" href="https://www.province-sud.nc/guides/environnement/guide-du-lagon/" target="_blank" rel="noopener noreferrer">Province Sud · Guide du lagon</a>
+        <a class="action secondary" href="https://www.province-nord.nc/parutions/agenda-marees-province-nord-2026" target="_blank" rel="noopener noreferrer">Province Nord · Règles de pêche</a>
+        <a class="action secondary" href="https://www.province-iles.nc/sites/default/files/2024-04/CEPIL2024%20version%20WEB%20VF.pdf" target="_blank" rel="noopener noreferrer">Îles Loyauté · Code de l’environnement (PDF)</a>
+      </div>
+    </section>
+
+    <section id="ilots" aria-labelledby="titre-ilots">
+      <h2 id="titre-ilots">Protection des îlots</h2>
+      <p>Avant de débarquer, consultez les restrictions d’accès et les mesures de protection des sites de ponte des tortues et de nidification des oiseaux marins.</p>
+      <div class="links">
+        <a class="action" href="https://www.province-sud.nc/environnement/ilots/ilots-accessibles-au-public-en-temps-reel/" target="_blank" rel="noopener noreferrer">Province Sud · Accès aux îlots</a>
+        <a class="action secondary" href="https://www.province-sud.nc/environnement/nos-actions-environnementales/evolutions-codenv/" target="_blank" rel="noopener noreferrer">Province Sud · Ponte et nidification</a>
+        <a class="action secondary" href="https://www.province-nord.nc/environnement/protection" target="_blank" rel="noopener noreferrer">Province Nord · Aires protégées</a>
+      </div>
+    </section>
+
+    <section id="calendrier" aria-labelledby="titre-calendrier">
+      <h2 id="titre-calendrier">Calendrier lunaire</h2>
+      <p id="date" class="date"></p>
+      <div class="moon">
+        <span id="lune" aria-hidden="true"></span>
+        <div>
+          <h3 id="phase"></h3>
+          <p id="age"></p>
+          <p id="illumination"></p>
+        </div>
+      </div>
+      <h3>Conseil de pêche du jour</h3>
+      <p id="resultat"></p>
+      <label for="jour">Consulter les 29 jours lunaires</label>
+      <select id="jour"></select>
+      <p id="manuel" role="status"></p>
+      <small>Calcul lunaire approximatif. Conseils traditionnels, sans garantie de capture.</small>
+    </section>
+    <footer><a href="#accueil">Retour à l’accueil ↑</a></footer>
+  </main>
+<script>
+const sectors={'Thio':[-21.61,166.22],'Nouméa':[-22.275,166.458],'Canala':[-21.52,165.96],'Houaïlou':[-21.28,165.62],'Hienghène':[-20.69,164.94],'Touho':[-20.79,165.23],'Poindimié':[-20.94,165.33],'Koumac':[-20.56,164.28],'Poum':[-20.23,164.02],'Bourail':[-21.57,165.49],'Yaté':[-22.16,166.9],'Île des Pins':[-22.63,167.47],'Lifou':[-20.92,167.24],'Maré':[-21.52,167.99],'Ouvéa':[-20.65,166.56],'Païta':[-22.13,166.36],'Dumbéa':[-22.15,166.45],'Mont-Dore':[-22.27,166.57],'Boulouparis':[-21.86,166.05],'La Foa':[-21.71,165.83],'Moindou':[-21.69,165.68],'Poya':[-21.35,165.15],'Pouembout':[-21.13,164.9],'Koné':[-21.06,164.86],'Voh':[-20.96,164.69],'Kaala-Gomen':[-20.67,164.39],'Ouégoa':[-20.34,164.44],'Pouébo':[-20.4,164.59],'Ponérihouen':[-21.08,165.4],'Kouaoua':[-21.4,165.82],'Belep':[-19.72,163.66],'Farino':[-21.67,165.78],'Sarraméa':[-21.64,165.84]};
+
+const bathymetryService = "https://carto10.gouv.nc/public/rest/services/bathymetrie_lagons_shom/MapServer";
+const exportEndpoint = bathymetryService + "/export";
+const reefService = "https://services1.arcgis.com/TZcrgU6CIbqWt9Qv/arcgis/rest/services/geomorphologie_recifs/FeatureServer/0/query";
+const reefAttribution = "Récifs : Andréfouët et Torres-Pulliza, 2004, IFRECOR / IRD / Géorep";
+// Échelles publiées par le service ArcGIS (dénominateurs à 96 dpi).
+const bathymetryLayers = [
+  { id: 0, minScale: 25000, maxScale: 0, label: "points de sondage sous-échantillonnés" },
+  { id: 1, minScale: 10000, maxScale: 5000, label: "isobathes de 2,5 m" },
+  { id: 2, minScale: 50000, maxScale: 25000, label: "isobathes de 5 m" },
+  { id: 3, minScale: 250000, maxScale: 100000, label: "isobathes de 20 m" }
+];
+
+const mapModes = document.getElementById("modes-carte");
+const zone = document.getElementById("zone");
+const seamarkButton = document.getElementById("toggle-seamarks");
+const seamarkStatus = document.getElementById("balises-statut");
+const bathymetryStatus = document.getElementById("bathymetrie-statut");
+const gpsStatus = document.getElementById("gps-statut");
+const gpsButton = document.getElementById("localiser");
+let map;
+let gpsMarker;
+
+if (window.L) {
+  map = L.map("carte-lagon", { zoomAnimation: false }).setView(sectors[zone.value] || sectors.Thio, 10);
+  const streetMap = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19, attribution: '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a>'
+  });
+  map.createPane("geoBase");
+  map.getPane("geoBase").style.zIndex = "201";
+  let localBase;
+  let pendingBase;
+
+  function updateBaseMap() {
+    const useGeoRep = window.location.protocol === "file:" || mapModes.querySelector(":checked").value === "fonds";
+    if (pendingBase) map.removeLayer(pendingBase);
+    pendingBase = undefined;
+    if (!useGeoRep) {
+      if (localBase) map.removeLayer(localBase);
+      localBase = undefined;
+      streetMap.addTo(map);
+      return;
+    }
+    map.removeLayer(streetMap);
+    const view = map.getBounds();
+    const sw = L.CRS.EPSG3857.project(view.getSouthWest());
+    const ne = L.CRS.EPSG3857.project(view.getNorthEast());
+    const size = map.getSize();
+    const params = new URLSearchParams({
+      bbox: [sw.x, sw.y, ne.x, ne.y].join(","), bboxSR: "3857", imageSR: "3857",
+      size: [size.x, size.y].join(","), format: "png32", f: "image"
+    });
+    const url = "https://carto10.gouv.nc/public/rest/services/fond_cartographie/MapServer/export?" + params;
+    const image = L.imageOverlay(url, view, {
+      pane: "geoBase", opacity: 0, alt: "", attribution: "Fond : Géorep / Gouvernement de la Nouvelle-Calédonie"
+    });
+    pendingBase = image;
+    image.once("load", () => {
+      if (pendingBase !== image) return;
+      if (localBase) map.removeLayer(localBase);
+      localBase = image;
+      pendingBase = undefined;
+      image.setOpacity(1);
+    });
+    image.once("error", () => {
+      if (pendingBase !== image) return;
+      map.removeLayer(image);
+      pendingBase = undefined;
+      if (window.location.protocol !== "file:") streetMap.addTo(map);
+    });
+    image.addTo(map);
+  }
+
+  let seamarks;
+  seamarkButton.disabled = false;
+  seamarkButton.addEventListener("click", () => {
+    const enabled = !seamarks;
+    if (enabled) {
+      const layer = L.tileLayer("https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png", {
+        maxNativeZoom: 18, maxZoom: 19, zIndex: 3, attribution: "© OpenSeaMap contributors"
+      });
+      seamarks = layer;
+      let failures = 0;
+      let successes = 0;
+      layer.on("loading", () => {
+        failures = 0;
+        successes = 0;
+        seamarkStatus.textContent = "Chargement des balises…";
+      });
+      layer.on("tileload", () => successes++);
+      layer.on("tileerror", () => {
+        failures++;
+        if (seamarks === layer) {
+          seamarkStatus.textContent = "Certaines tuiles OpenSeaMap sont indisponibles ou sans balises à cette échelle.";
+        }
+      });
+      layer.on("load", () => {
+        if (seamarks !== layer) return;
+        if (!failures) seamarkStatus.textContent = "";
+        if (failures && !successes) {
+          seamarkStatus.textContent = "Aucune tuile OpenSeaMap reçue pour cette vue. Changez de zoom ou réessayez.";
+        }
+      });
+      layer.addTo(map);
+    } else {
+      map.removeLayer(seamarks);
+      seamarks = undefined;
+      seamarkStatus.textContent = "";
+    }
+    seamarkButton.setAttribute("aria-pressed", String(enabled));
+    seamarkButton.textContent = enabled ? "Balises OpenSeaMap : activées" : "Balises OpenSeaMap : désactivées";
+  });
+
+  const bathymetryLegend = document.getElementById("bathymetrie-legende");
+  map.createPane("bathymetry");
+  map.getPane("bathymetry").style.zIndex = "225";
+  map.createPane("reefs");
+  map.getPane("reefs").style.zIndex = "226";
+  map.createPane("depthVectors");
+  map.getPane("depthVectors").style.zIndex = "227";
+  map.createPane("depthLabels");
+  Object.assign(map.getPane("depthLabels").style, { zIndex: "228", pointerEvents: "none" });
+
+  const surface = L.layerGroup();
+  const labels = L.layerGroup();
+  const reefs = L.layerGroup();
+  const depthFormat = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 1 });
+  let displayBounds;
+  let request;
+
+  function depthColor(depth) {
+    if (depth <= 5) return "#087f89";
+    if (depth <= 20) return "#247bb8";
+    if (depth <= 50) return "#244ca7";
+    return "#172d72";
+  }
+
+  async function queryDepths(id, bounds, zoom, signal) {
+    const field = id === 0 ? "z" : "contour";
+    const params = new URLSearchParams({
+      where: field + " >= 0",
+      outFields: field,
+      geometry: bounds.toBBoxString(),
+      geometryType: "esriGeometryEnvelope",
+      inSR: "4326", outSR: "4326",
+      geometryPrecision: "6",
+      maxAllowableOffset: String(360 / (256 * 2 ** zoom)),
+      resultRecordCount: id === 0 ? "180" : "450",
+      orderByFields: id === 0 ? "z ASC, objectid ASC" : "shape_Length DESC, objectid ASC",
+      f: "geojson"
+    });
+    const response = await fetch(bathymetryService + "/" + id + "/query?" + params, { signal });
+    if (!response.ok) throw new Error("HTTP " + response.status);
+    const data = await response.json();
+    if (!Array.isArray(data.features)) throw new Error("Réponse ArcGIS invalide");
+    return { features: data.features.filter(feature => feature.geometry &&
+      Number.isFinite(feature.properties?.[field]) && feature.properties[field] >= 0),
+      limited: Boolean(data.exceededTransferLimit) };
+  }
+
+  async function queryReefs(bounds, zoom, signal) {
+    const params = new URLSearchParams({
+      where: "reef = 1", geometry: bounds.toBBoxString(), geometryType: "esriGeometryEnvelope",
+      inSR: "4326", outSR: "4326", outFields: "objectid", f: "geojson",
+      geometryPrecision: "6", maxAllowableOffset: String(360 / (256 * 2 ** zoom)),
+      orderByFields: "Shape__Area DESC, objectid ASC", resultRecordCount: "220"
+    });
+    const response = await fetch(reefService + "?" + params, { signal });
+    if (!response.ok) throw new Error("HTTP " + response.status);
+    const data = await response.json();
+    if (!Array.isArray(data.features)) throw new Error("Réponse de la couche récifs invalide");
+    return L.geoJSON(data, {
+      pane: "reefs", interactive: false, attribution: reefAttribution,
+      style: { color: "#237365", weight: .8, opacity: .85, fillColor: "#77d6ac", fillOpacity: .32 }
+    });
+  }
+
+  function addLabels(candidates) {
+    const used = [];
+    const size = map.getSize();
+    const depths = new Set();
+    for (const { latLng, depth, sounding } of candidates) {
+      const point = map.latLngToContainerPoint(latLng);
+      if (point.x < 26 || point.x > size.x - 26 || point.y < 20 || point.y > size.y - 24) continue;
+      if (used.some(other => Math.abs(other.x - point.x) < 49 && Math.abs(other.y - point.y) < 24)) continue;
+      if (!sounding && depths.has(depth)) continue;
+      used.push(point);
+      depths.add(depth);
+      L.marker(latLng, {
+        pane: "depthLabels", interactive: false, keyboard: false,
+        icon: L.divIcon({ className: "depth-label", iconSize: [44, 16], iconAnchor: [22, 8],
+          html: depthFormat.format(depth) + " m" })
+      }).addTo(labels);
+      if (used.length >= 18) break;
+    }
+  }
+
+  function showDepths(contours, soundings) {
+    const viewport = L.bounds([0, 0], map.getSize());
+    const candidates = [];
+    surface.clearLayers();
+    labels.clearLayers();
+    L.geoJSON(contours, {
+      pane: "depthVectors",
+      style: feature => ({
+        color: depthColor(feature.properties.contour), weight: 1.15, opacity: .95
+      }),
+      onEachFeature(feature, line) {
+        const depth = feature.properties.contour;
+        line.bindTooltip(depthFormat.format(depth) + " m");
+        const paths = feature.geometry.type === "MultiLineString" ? feature.geometry.coordinates : [feature.geometry.coordinates];
+        for (const path of paths) {
+          for (let i = 1; i < path.length; i++) {
+            const [lon, lat] = path[i];
+            const from = map.latLngToContainerPoint([path[i - 1][1], path[i - 1][0]]);
+            const to = map.latLngToContainerPoint([lat, lon]);
+            const segment = L.LineUtil.clipSegment(from, to, viewport);
+            if (!segment) continue;
+            const [start, end] = segment;
+            const steps = Math.max(1, Math.ceil(start.distanceTo(end) / 45));
+            for (let step = 0; step <= steps; step++) {
+              const fraction = step / steps;
+              const point = start.add(end.subtract(start).multiplyBy(fraction));
+              candidates.push({ latLng: map.containerPointToLatLng(point), depth });
+            }
+          }
+        }
+      }
+    }).addTo(surface);
+    const soundingLabels = [];
+    L.geoJSON(soundings, {
+      pointToLayer(feature, latLng) {
+        const depth = feature.properties.z;
+        soundingLabels.push({ latLng, depth, sounding: true });
+        return L.circleMarker(latLng, { pane: "depthVectors", radius: 2, stroke: false,
+          fillColor: depthColor(depth), fillOpacity: .82 }).bindTooltip(depthFormat.format(depth) + " m");
+      }
+    }).addTo(surface);
+    addLabels([...candidates, ...soundingLabels]);
+  }
+
+  function showOfficialImage(view, id, signal) {
+    const sw = L.CRS.EPSG3857.project(view.getSouthWest());
+    const ne = L.CRS.EPSG3857.project(view.getNorthEast());
+    const size = map.getSize();
+    const params = new URLSearchParams({
+      bbox: [sw.x, sw.y, ne.x, ne.y].join(","), bboxSR: "3857", imageSR: "3857",
+      size: [size.x, size.y].join(","), dpi: "96", format: "png32",
+      transparent: "true", layers: "show:" + id, f: "image"
+    });
+    const overlay = L.imageOverlay(exportEndpoint + "?" + params, view, { pane: "bathymetry", alt: "" });
+    overlay.once("load", () => {
+      if (!signal.aborted) bathymetryStatus.textContent = "Aperçu officiel SHOM. Les profondeurs chiffrées sont indisponibles pour cette vue.";
+    });
+    overlay.once("error", () => {
+      if (!signal.aborted) bathymetryStatus.textContent = "Fonds marins indisponibles. Déplacez la carte ou changez de zoom pour réessayer.";
+    });
+    overlay.addTo(surface);
+  }
+
+  async function updateBathymetry() {
+    request?.abort();
+    request = undefined;
+    const enabled = mapModes.querySelector(":checked").value === "fonds";
+    bathymetryLegend.hidden = !enabled;
+    if (!enabled) {
+      surface.clearLayers();
+      labels.clearLayers();
+      map.removeLayer(surface);
+      map.removeLayer(labels);
+      reefs.clearLayers();
+      map.removeLayer(reefs);
+      displayBounds = undefined;
+      bathymetryStatus.textContent = "";
+      return;
+    }
+
+    surface.addTo(map);
+    reefs.addTo(map);
+    labels.addTo(map);
+    const view = map.getBounds();
+    const zoom = map.getZoom();
+    if (!displayBounds?.intersects(view)) {
+      surface.clearLayers();
+      labels.clearLayers();
+      reefs.clearLayers();
+    }
+    if (zoom < 11) {
+      surface.clearLayers();
+      labels.clearLayers();
+      reefs.clearLayers();
+      bathymetryStatus.textContent = "Zoomez pour consulter les fonds marins.";
+      return;
+    }
+
+    request = new AbortController();
+    const { signal } = request;
+    const requestForView = request;
+    const timeout = setTimeout(() => requestForView.abort(), 18000);
+    const order = zoom >= 15 ? [1, 2, 3] : zoom >= 13 ? [2, 3] : [3];
+    const status = "Chargement des courbes et profondeurs…";
+    bathymetryStatus.textContent = status;
+    try {
+      const bounds = view;
+      const reefRequest = queryReefs(bounds, zoom, signal).then(layer => {
+        if (signal.aborted) return true;
+        reefs.clearLayers();
+        if (layer.getLayers().length) layer.addTo(reefs);
+        return true;
+      }).catch(() => false);
+      const soundingRequest = zoom >= 15
+        ? queryDepths(0, bounds, zoom, signal).catch(() => ({ features: [], limited: false }))
+        : Promise.resolve({ features: [], limited: false });
+      let contours;
+      let selected;
+      for (const id of order) {
+        contours = await queryDepths(id, bounds, zoom, signal);
+        if (contours.features.length) {
+          selected = id;
+          break;
+        }
+      }
+      const [soundings, reefsAvailable] = await Promise.all([soundingRequest, reefRequest]);
+      if (signal.aborted) return;
+      if (!contours.features.length && !soundings.features.length &&
+          displayBounds?.contains(view) && surface.getLayers().length) {
+        bathymetryStatus.textContent = "Tracés conservés au zoom précédent. Aucun détail SHOM supplémentaire pour cette vue.";
+        return;
+      }
+      showDepths(contours.features, soundings.features);
+      displayBounds = bounds;
+      const detail = bathymetryLayers.find(layer => layer.id === selected)?.label;
+      const parts = [detail, soundings.features.length && "sondes SHOM"].filter(Boolean);
+      bathymetryStatus.textContent = parts.length
+        ? parts.join(" et ") + " · Profondeurs en mètres." +
+          (contours.limited || soundings.limited ? " Affichage partiel : zoomez pour voir plus de détails." : "")
+        : "Aucune courbe ou sonde disponible pour cette vue.";
+      if (!reefsAvailable) bathymetryStatus.textContent += " Couche des récifs indisponible.";
+    } catch {
+      if (request !== requestForView || signal.aborted) return;
+      const scale = 40075016.6856 / (256 * 2 ** zoom) * 96 / .0254;
+      const fallback = bathymetryLayers.find(layer => layer.maxScale <= scale && scale <= layer.minScale);
+      if (fallback && !surface.getLayers().length) {
+        showOfficialImage(view, fallback.id, signal);
+        displayBounds = view;
+      } else {
+        bathymetryStatus.textContent = "Impossible d’actualiser les fonds marins. Déplacez la carte pour réessayer.";
+      }
+    } finally {
+      clearTimeout(timeout);
+      if (request === requestForView && signal.aborted) {
+        bathymetryStatus.textContent = "Le service bathymétrique ne répond pas. Déplacez la carte pour réessayer.";
+      }
+    }
+  }
+
+  mapModes.disabled = false;
+  mapModes.addEventListener("change", () => {
+    if (mapModes.querySelector(":checked").value === "fonds" && map.getZoom() < 12) {
+      map.setZoom(12, { animate: false });
+    } else {
+      updateBaseMap();
+      updateBathymetry();
+    }
+  });
+  map.on("moveend", () => {
+    updateBaseMap();
+    updateBathymetry();
+  });
+  updateBaseMap();
+  zone.addEventListener("change", () => {
+    const zoom = mapModes.querySelector(":checked").value === "fonds" ? Math.max(12, map.getZoom()) : 10;
+    map.setView(sectors[zone.value] || sectors.Thio, zoom);
+  });
+} else {
+  bathymetryStatus.textContent = "La carte ne peut pas démarrer. Vous pouvez ouvrir la carte externe.";
+}
+
+gpsButton.addEventListener("click", () => {
+  if (!navigator.geolocation || !window.isSecureContext) {
+    gpsStatus.textContent = "Le GPS nécessite un navigateur compatible et une page ouverte en HTTPS.";
+    return;
+  }
+  gpsButton.disabled = true;
+  gpsStatus.textContent = "Recherche de votre position…";
+  navigator.geolocation.getCurrentPosition(({ coords }) => {
+    const position = [coords.latitude, coords.longitude];
+    if (map) {
+      if (gpsMarker) map.removeLayer(gpsMarker);
+      gpsMarker = L.circleMarker(position, {
+        radius: 9, color: "#fff", weight: 3, fillColor: "#1373db", fillOpacity: 1
+      }).addTo(map);
+      const zoom = mapModes.querySelector(":checked").value === "fonds" ? map.getZoom() : 13;
+      map.setView(position, zoom);
+    }
+    gpsStatus.textContent = "Position GPS trouvée (précision estimée : " + Math.round(coords.accuracy) + " m).";
+    gpsButton.disabled = false;
+  }, error => {
+    gpsStatus.textContent = error.code === 1
+      ? "Autorisation GPS refusée."
+      : "Position GPS indisponible. Vérifiez les autorisations et le signal.";
+    gpsButton.disabled = false;
+  }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 });
+});
+
+</script>
+<script>
+(function(){'use strict';
+const $=id=>document.getElementById(id);
+const cycle=29.530588853,epoch=Date.UTC(2000,0,6,18,14),day=86400000;
+function ageAt(d){const utc=Date.UTC(d.getFullYear(),d.getMonth(),d.getDate(),12);return ((utc-epoch)/day%cycle+cycle)%cycle}
+const names=['Nouvelle lune','Premier croissant','Premier quartier','Lune gibbeuse croissante','Pleine lune','Lune gibbeuse décroissante','Dernier quartier','Dernier croissant'];
+const moons=['🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘'];
+function phase(a){return a<1.84566?0:a<5.53699?1:a<9.22831?2:a<12.91963?3:a<16.61096?4:a<20.30228?5:a<23.99361?6:a<27.68493?7:0}
+const advice=[
+"Bon de la nuit à l’aube",
+"Bon de la nuit au début de la matinée",
+"Bon jusqu’au milieu de l’après-midi",
+"Très bon jusqu’au milieu de l’après-midi",
+"Très bon jusqu’au milieu de l’après-midi",
+"Très bon jusqu’au milieu de l’après-midi",
+"Excellent toute la matinée",
+"Bon le matin, moyen l’après-midi",
+"Bon le matin, excellent l’après-midi",
+"Moyen toute la journée",
+"Moyen toute la journée",
+"Moyen toute la journée",
+"Excellent de l’après-midi à la nuit",
+"Excellent toute la journée",
+"Moyen toute la journée",
+"Mauvaise journée",
+"Très mauvaise journée",
+"Bonne journée",
+"Bon le matin, moyen l’après-midi",
+"Bon le matin, mauvais l’après-midi",
+"Bon le matin jusqu’à midi",
+"Bon l’après-midi",
+"Moyen vers le soir",
+"Moyen vers le soir",
+"Moyen vers le soir",
+"Bon l’après-midi",
+"Excellent l’après-midi et le soir",
+"Excellent l’après-midi et le soir",
+"Bon le soir"
+];
+const now=new Date(),sel=$('jour');for(let i=0;i<29;i++){const o=document.createElement('option');o.value=i;o.textContent='Jour lunaire '+(i+1);sel.append(o)}
+function render(d){const a=ageAt(d),n=Math.min(28, Math.floor(a)),i=phase(a);$('date').textContent=d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});$('lune').textContent=moons[i];$('phase').textContent=names[i];$('age').textContent='Âge lunaire estimé : '+a.toFixed(1)+' jours';$('illumination').textContent='Éclairage estimé : '+Math.round((1-Math.cos(2*Math.PI*a/cycle))*50)+' %';$('resultat').textContent=advice[n];$('manuel').textContent='Jour lunaire '+(n+1)+' sur 29. Indication approximative.'}
+sel.value=Math.min(28, Math.floor(ageAt(now)));render(now);sel.addEventListener('change', () => {
+  const index = Number(sel.value);
+  $('manuel').textContent = advice[index];
+});
+})();
+</script>
+</body>
+</html>
